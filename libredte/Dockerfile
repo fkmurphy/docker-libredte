@@ -41,5 +41,28 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 RUN  wget -c https://github.com/SowerPHP/sowerpkg/raw/master/sowerpkg.sh \
          && chmod +x sowerpkg.sh && mv sowerpkg.sh /usr/local/bin/sowerpkg && sowerpkg install -W
-COPY ${PWD}/start.sh /opt/
-RUN chmod u+x /opt/start.sh && /opt/start.sh
+
+WORKDIR /app
+
+RUN mkdir /install_ldte
+COPY ${PWD}/start.sh ${PWD}/core-dist.php ${PWD}/routes-dist.php /install_ldte/
+
+RUN cd /app && git clone --recursive https://github.com/LibreDTE/libredte-webapp.git . \
+    && cd /app/website \
+    && composer install
+
+ENV CONFIG_DIR="/app/website/Config"
+ENV CONFIG_FILE="${CONFIG_DIR}/core.php"
+ENV ROUTE_FILE="${CONFIG_DIR}/routes.php"
+
+RUN cp "/install_ldte/core-dist.php" "${CONFIG_FILE}" \
+    && sed -i -e "s/%DB_USER%/${DB_USER}/g" \
+              -e "s/%DB_PASSWORD%/${DB_PASSWORD}/g" \
+              -e "s/%DB_HOSTNAME%/${DB_HOSTNAME}/g" \
+              -e "s/%DB_NAME%/${DB_NAME}/g" \
+           "${CONFIG_FILE}" \
+    && cp "/install_ldte/routes-dist.php" "${ROUTE_FILE}"
+
+
+
+
