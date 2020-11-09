@@ -7,3 +7,7 @@ services:
     # - ${PWD}/app:/app
   apache:
     build: ${PWD}/apache
+  postgres:
+    image: postgres:13-alpine
+    env_file: db.env
+
