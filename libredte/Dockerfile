@@ -40,16 +40,18 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 
 RUN  wget -c https://github.com/SowerPHP/sowerpkg/raw/master/sowerpkg.sh \
-         && chmod +x sowerpkg.sh && mv sowerpkg.sh /usr/local/bin/sowerpkg && sowerpkg install -W
+         && chmod +x sowerpkg.sh && mv sowerpkg.sh /usr/local/bin/sowerpkg \
+         && sowerpkg install -e "app general" -W
 
 WORKDIR /app
-
-RUN mkdir /install_ldte
-COPY ${PWD}/start.sh ${PWD}/core-dist.php ${PWD}/routes-dist.php /install_ldte/
-
 RUN cd /app && git clone --recursive https://github.com/LibreDTE/libredte-webapp.git . \
     && cd /app/website \
     && composer install
+
+RUN mkdir /install_ldte
+COPY ${PWD}/docker-entrypoint.sh ${PWD}/core-dist.php ${PWD}/routes-dist.php /install_ldte/
+
+RUN chmod u+x /install_ldte/docker-entrypoint.sh
 
 ENV CONFIG_DIR="/app/website/Config"
 ENV CONFIG_FILE="${CONFIG_DIR}/core.php"
@@ -63,6 +65,4 @@ RUN cp "/install_ldte/core-dist.php" "${CONFIG_FILE}" \
            "${CONFIG_FILE}" \
     && cp "/install_ldte/routes-dist.php" "${ROUTE_FILE}"
 
-
-
-
+CMD ["/install_ldte/docker-entrypoint.sh"]
