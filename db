@@ -1,0 +1,1459 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.5
+-- Dumped by pg_dump version 12.4
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: actividad_economica; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.actividad_economica (
+    codigo integer NOT NULL,
+    actividad_economica character varying(120) NOT NULL,
+    afecta_iva boolean,
+    categoria smallint
+);
+
+
+ALTER TABLE public.actividad_economica OWNER TO prueba;
+
+--
+-- Name: TABLE actividad_economica; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.actividad_economica IS 'Actividades económicas del país';
+
+
+--
+-- Name: COLUMN actividad_economica.codigo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.actividad_economica.codigo IS 'Código de la actividad económica';
+
+
+--
+-- Name: COLUMN actividad_economica.actividad_economica; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.actividad_economica.actividad_economica IS 'Glosa de la actividad económica';
+
+
+--
+-- Name: COLUMN actividad_economica.afecta_iva; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.actividad_economica.afecta_iva IS 'Si la actividad está o no afecta a IVA';
+
+
+--
+-- Name: COLUMN actividad_economica.categoria; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.actividad_economica.categoria IS 'Categoría a la que pertenece la actividad (tipo de contribuyente)';
+
+
+--
+-- Name: auth; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.auth (
+    id integer NOT NULL,
+    grupo integer NOT NULL,
+    recurso character varying(300)
+);
+
+
+ALTER TABLE public.auth OWNER TO prueba;
+
+--
+-- Name: TABLE auth; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.auth IS 'Permisos de grupos para acceder a recursos';
+
+
+--
+-- Name: COLUMN auth.id; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.auth.id IS 'Identificador (serial)';
+
+
+--
+-- Name: COLUMN auth.grupo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.auth.grupo IS 'Grupo al que se le concede el permiso';
+
+
+--
+-- Name: COLUMN auth.recurso; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.auth.recurso IS 'Recurso al que el grupo tiene acceso';
+
+
+--
+-- Name: auth_id_seq; Type: SEQUENCE; Schema: public; Owner: prueba
+--
+
+CREATE SEQUENCE public.auth_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_id_seq OWNER TO prueba;
+
+--
+-- Name: auth_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: prueba
+--
+
+ALTER SEQUENCE public.auth_id_seq OWNED BY public.auth.id;
+
+
+--
+-- Name: comuna; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.comuna (
+    codigo character(5) NOT NULL,
+    comuna character varying(40) NOT NULL,
+    provincia character(3) NOT NULL
+);
+
+
+ALTER TABLE public.comuna OWNER TO prueba;
+
+--
+-- Name: TABLE comuna; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.comuna IS 'Comunas de cada provincia del país';
+
+
+--
+-- Name: COLUMN comuna.codigo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.comuna.codigo IS 'Código de la comuna';
+
+
+--
+-- Name: COLUMN comuna.comuna; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.comuna.comuna IS 'Nombre de la comuna';
+
+
+--
+-- Name: COLUMN comuna.provincia; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.comuna.provincia IS 'Provincia a la que pertenece la comuna';
+
+
+--
+-- Name: grupo_id_seq; Type: SEQUENCE; Schema: public; Owner: prueba
+--
+
+CREATE SEQUENCE public.grupo_id_seq
+    START WITH 1000
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.grupo_id_seq OWNER TO prueba;
+
+--
+-- Name: grupo; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.grupo (
+    id integer DEFAULT nextval('public.grupo_id_seq'::regclass) NOT NULL,
+    grupo character varying(30) NOT NULL,
+    activo boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE public.grupo OWNER TO prueba;
+
+--
+-- Name: TABLE grupo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.grupo IS 'Grupos de la aplicación';
+
+
+--
+-- Name: COLUMN grupo.id; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.grupo.id IS 'Identificador (serial)';
+
+
+--
+-- Name: COLUMN grupo.grupo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.grupo.grupo IS 'Nombre del grupo';
+
+
+--
+-- Name: COLUMN grupo.activo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.grupo.activo IS 'Indica si el grupo se encuentra activo';
+
+
+--
+-- Name: moneda_cambio; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.moneda_cambio (
+    desde character(3) NOT NULL,
+    a character(3) NOT NULL,
+    fecha date NOT NULL,
+    valor double precision NOT NULL
+);
+
+
+ALTER TABLE public.moneda_cambio OWNER TO prueba;
+
+--
+-- Name: provincia; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.provincia (
+    codigo character(3) NOT NULL,
+    provincia character varying(30) NOT NULL,
+    region character(2) NOT NULL
+);
+
+
+ALTER TABLE public.provincia OWNER TO prueba;
+
+--
+-- Name: TABLE provincia; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.provincia IS 'Provincias de cada región del país';
+
+
+--
+-- Name: COLUMN provincia.codigo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.provincia.codigo IS 'Código de la provincia';
+
+
+--
+-- Name: COLUMN provincia.provincia; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.provincia.provincia IS 'Nombre de la provincia';
+
+
+--
+-- Name: COLUMN provincia.region; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.provincia.region IS 'Región a la que pertenece la provincia';
+
+
+--
+-- Name: region; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.region (
+    codigo character(2) NOT NULL,
+    region character varying(60) NOT NULL
+);
+
+
+ALTER TABLE public.region OWNER TO prueba;
+
+--
+-- Name: TABLE region; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.region IS 'Regiones del país';
+
+
+--
+-- Name: COLUMN region.codigo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.region.codigo IS 'Código de la región';
+
+
+--
+-- Name: COLUMN region.region; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.region.region IS 'Nombre de la región';
+
+
+--
+-- Name: usuario_id_seq; Type: SEQUENCE; Schema: public; Owner: prueba
+--
+
+CREATE SEQUENCE public.usuario_id_seq
+    START WITH 1000
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.usuario_id_seq OWNER TO prueba;
+
+--
+-- Name: usuario; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.usuario (
+    id integer DEFAULT nextval('public.usuario_id_seq'::regclass) NOT NULL,
+    nombre character varying(50) NOT NULL,
+    usuario character varying(30) NOT NULL,
+    usuario_ldap character varying(30),
+    email character varying(50) NOT NULL,
+    contrasenia character varying(255) NOT NULL,
+    contrasenia_intentos smallint DEFAULT 3 NOT NULL,
+    hash character(32) NOT NULL,
+    token character(64),
+    activo boolean DEFAULT true NOT NULL,
+    ultimo_ingreso_fecha_hora timestamp without time zone,
+    ultimo_ingreso_desde character varying(45),
+    ultimo_ingreso_hash character(32)
+);
+
+
+ALTER TABLE public.usuario OWNER TO prueba;
+
+--
+-- Name: TABLE usuario; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.usuario IS 'Usuarios de la aplicación';
+
+
+--
+-- Name: COLUMN usuario.id; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.id IS 'Identificador (serial)';
+
+
+--
+-- Name: COLUMN usuario.nombre; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.nombre IS 'Nombre real del usuario';
+
+
+--
+-- Name: COLUMN usuario.usuario; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.usuario IS 'Nombre de usuario de LDAP';
+
+
+--
+-- Name: COLUMN usuario.email; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.email IS 'Correo electrónico del usuario';
+
+
+--
+-- Name: COLUMN usuario.contrasenia; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.contrasenia IS 'Contraseña del usuario';
+
+
+--
+-- Name: COLUMN usuario.contrasenia_intentos; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.contrasenia_intentos IS 'Intentos de inicio de sesión antes de bloquear cuenta';
+
+
+--
+-- Name: COLUMN usuario.hash; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.hash IS 'Hash único del usuario (32 caracteres)';
+
+
+--
+-- Name: COLUMN usuario.token; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.token IS 'Token para servicio secundario de autorización';
+
+
+--
+-- Name: COLUMN usuario.activo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.activo IS 'Indica si el usuario está o no activo en la aplicación';
+
+
+--
+-- Name: COLUMN usuario.ultimo_ingreso_fecha_hora; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.ultimo_ingreso_fecha_hora IS 'Fecha y hora del último ingreso del usuario';
+
+
+--
+-- Name: COLUMN usuario.ultimo_ingreso_desde; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.ultimo_ingreso_desde IS 'Dirección IP del último ingreso del usuario';
+
+
+--
+-- Name: COLUMN usuario.ultimo_ingreso_hash; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario.ultimo_ingreso_hash IS 'Hash del último ingreso del usuario';
+
+
+--
+-- Name: usuario_config; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.usuario_config (
+    usuario integer NOT NULL,
+    configuracion character varying(32) NOT NULL,
+    variable character varying(64) NOT NULL,
+    valor text,
+    json boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.usuario_config OWNER TO prueba;
+
+--
+-- Name: usuario_grupo; Type: TABLE; Schema: public; Owner: prueba
+--
+
+CREATE TABLE public.usuario_grupo (
+    usuario integer NOT NULL,
+    grupo integer NOT NULL,
+    primario boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.usuario_grupo OWNER TO prueba;
+
+--
+-- Name: TABLE usuario_grupo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON TABLE public.usuario_grupo IS 'Relación entre usuarios y los grupos a los que pertenecen';
+
+
+--
+-- Name: COLUMN usuario_grupo.usuario; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario_grupo.usuario IS 'Usuario de la aplicación';
+
+
+--
+-- Name: COLUMN usuario_grupo.grupo; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario_grupo.grupo IS 'Grupo al que pertenece el usuario';
+
+
+--
+-- Name: COLUMN usuario_grupo.primario; Type: COMMENT; Schema: public; Owner: prueba
+--
+
+COMMENT ON COLUMN public.usuario_grupo.primario IS 'Indica si el grupo es el grupo primario del usuario';
+
+
+--
+-- Name: auth id; Type: DEFAULT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.auth ALTER COLUMN id SET DEFAULT nextval('public.auth_id_seq'::regclass);
+
+
+--
+-- Data for Name: actividad_economica; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.actividad_economica (codigo, actividad_economica, afecta_iva, categoria) FROM stdin;
+11101	Cultivo de trigo	\N	\N
+11102	Cultivo de maíz	\N	\N
+11103	Cultivo de avena	\N	\N
+11200	Cultivo de arroz	\N	\N
+11104	Cultivo de cebada	\N	\N
+11105	Cultivo de otros cereales (excepto trigo, maíz, avena y cebada)	\N	\N
+11902	Cultivos forrajeros en praderas mejoradas o sembradas; cultivos suplementarios forrajeros	\N	\N
+11106	Cultivo de porotos	\N	\N
+11107	Cultivo de lupino	\N	\N
+11108	Cultivo de otras legumbres (excepto porotos y lupino)	\N	\N
+11301	Cultivo de papas	\N	\N
+11302	Cultivo de camotes	\N	\N
+11303	Cultivo de otros tubérculos (excepto papas y camotes)	\N	\N
+11109	Cultivo de semillas de raps	\N	\N
+11110	Cultivo de semillas de maravilla (girasol)	\N	\N
+11111	Cultivo de semillas de cereales, legumbres y oleaginosas (excepto semillas de raps y maravilla)	\N	\N
+12600	Cultivo de frutos oleaginosos (incluye el cultivo de aceitunas)	\N	\N
+11304	Cultivo de remolacha azucarera	\N	\N
+11500	Cultivo de tabaco	\N	\N
+16300	Actividades poscosecha	\N	\N
+11600	Cultivo de plantas de fibra	\N	\N
+12900	Cultivo de otras plantas perennes	\N	\N
+12802	Cultivo de plantas aromáticas, medicinales y farmacéuticas	\N	\N
+11400	Cultivo de caña de azúcar	\N	\N
+11306	Cultivo de hortalizas y melones	\N	\N
+11901	Cultivo de flores	\N	\N
+13000	Cultivo de plantas vivas incluida la producción en viveros (excepto viveros forestales)	\N	\N
+11305	Cultivo de semillas de hortalizas	\N	\N
+11903	Cultivos de semillas de flores; cultivo de semillas de plantas forrajeras	\N	\N
+12501	Cultivo de semillas de frutas	\N	\N
+23000	Recolección de productos forestales distintos de la madera	\N	\N
+12111	Cultivo de uva destinada a la producción de pisco y aguardiente	\N	\N
+12112	Cultivo de uva destinada a la producción de vino	\N	\N
+110200	Elaboración de vinos	\N	\N
+12120	Cultivo de uva para mesa	\N	\N
+12200	Cultivo de frutas tropicales y subtropicales (incluye el cultivo de paltas)	\N	\N
+12300	Cultivo de cítricos	\N	\N
+12400	Cultivo de frutas de pepita y de hueso	\N	\N
+12502	Cultivo de otros frutos y nueces de árboles y arbustos	\N	\N
+12700	Cultivo de plantas con las que se preparan bebidas (incluye el cultivo de café, té y mate)	\N	\N
+12801	Cultivo de especias	\N	\N
+14101	Cría de ganado bovino para la producción lechera	\N	\N
+14102	Cría de ganado bovino para la producción de carne o como ganado reproductor	\N	\N
+14410	Cría de ovejas (ovinos)	\N	\N
+14200	Cría de caballos y otros equinos	\N	\N
+14500	Cría de cerdos	\N	\N
+14601	Cría de aves de corral para la producción de carne	\N	\N
+14602	Cría de aves de corral para la producción de huevos	\N	\N
+14909	Cría de otros animales n.c.p.	\N	\N
+14901	Apicultura	\N	\N
+32200	Acuicultura de agua dulce	\N	\N
+14300	Cría de llamas, alpacas, vicuñas, guanacos y otros camélidos	\N	\N
+14420	Cría de cabras (caprinos)	\N	\N
+32130	Reproducción y cría de moluscos, crustáceos y gusanos marinos	\N	\N
+15000	Cultivo de productos agrícolas en combinación con la cría de animales (explotación mixta)	\N	\N
+16400	Tratamiento de semillas para propagación	\N	\N
+16100	Actividades de apoyo a la agricultura	\N	\N
+813000	Actividades de paisajismo, servicios de jardinería y servicios conexos	\N	\N
+960901	Servicios de adiestramiento, guardería, peluquería, paseo de mascotas (excepto act. Veterinarias)	\N	\N
+16200	Actividades de apoyo a la ganadería	\N	\N
+17000	Caza ordinaria y mediante trampas y actividades de servicios conexas	\N	\N
+949909	Actividades de otras asociaciones n.c.p.	\N	\N
+21002	Silvicultura y otras actividades forestales (excepto explotación de viveros forestales)	\N	\N
+22000	Extracción de madera	\N	\N
+21001	Explotación de viveros forestales	\N	\N
+24001	Servicios de forestación a cambio de una retribución o por contrata	\N	\N
+24002	Servicios de corta de madera a cambio de una retribución o por contrata	\N	\N
+24003	Servicios de extinción y prevención de incendios forestales	\N	\N
+24009	Otros servicios de apoyo a la silvicultura n.c.p.	\N	\N
+32110	Cultivo y crianza de peces marinos	\N	\N
+32120	Cultivo, reproducción y manejo de algas marinas	\N	\N
+32140	Servicios relacionados con la acuicultura marina	\N	\N
+31110	Pesca marítima industrial, excepto de barcos factoría	\N	\N
+102050	Actividades de elaboración y conservación de pescado, realizadas en barcos factoría	\N	\N
+31120	Pesca marítima artesanal	\N	\N
+31200	Pesca de agua dulce	\N	\N
+31130	Recolección y extracción de productos marinos	\N	\N
+31140	Servicios relacionados con la pesca marítima	\N	\N
+51000	Extracción de carbón de piedra	\N	\N
+52000	Extracción de lignito	\N	\N
+89200	Extracción de turba	\N	\N
+99001	Actividades de apoyo para la explotación de otras minas y canteras prestados por empresas	\N	\N
+192000	Fabricación de productos de la refinación del petróleo	\N	\N
+61000	Extracción de petróleo crudo	\N	\N
+62000	Extracción de gas natural	\N	\N
+91001	Actividades de apoyo para la extracción de petróleo y gas natural prestados por empresas	\N	\N
+72100	Extracción de minerales de uranio y torio	\N	\N
+71000	Extracción de minerales de hierro	\N	\N
+72910	Extracción de oro y plata	\N	\N
+72991	Extracción de zinc y plomo	\N	\N
+72992	Extracción de manganeso	\N	\N
+72999	Extracción de otros minerales metalíferos no ferrosos n.c.p. (excepto zinc, plomo y manganeso)	\N	\N
+40000	Extracción y procesamiento de cobre	\N	\N
+81000	Extracción de piedra, arena y arcilla	\N	\N
+89190	Extracción de minerales para la fabricación de abonos y productos químicos n.c.p.	\N	\N
+89300	Extracción de sal	\N	\N
+89110	Extracción y procesamiento de litio	\N	\N
+89900	Explotación de otras minas y canteras n.c.p.	\N	\N
+101011	Explotación de mataderos de bovinos, ovinos, equinos, caprinos, porcinos y camélidos	\N	\N
+521001	Explotación de frigoríficos para almacenamiento y depósito	\N	\N
+101019	Explotación de mataderos de aves y de otros tipos de animales n.c.p.	\N	\N
+101020	Elaboración y conservación de carne y productos cárnicos	\N	\N
+102010	Producción de harina de pescado	\N	\N
+102020	Elaboración y conservación de salmónidos	\N	\N
+102030	Elaboración y conservación de otros pescados, en plantas en tierra (excepto barcos factoría)	\N	\N
+102040	Elaboración y conservación de crustáceos, moluscos y otros productos acuáticos, en plantas en tierra	\N	\N
+107500	Elaboración de comidas y platos preparados envasados, rotulados y con información nutricional	\N	\N
+102060	Elaboración y procesamiento de algas	\N	\N
+103000	Elaboración y conservación de frutas, legumbres y hortalizas	\N	\N
+104000	Elaboración de aceites y grasas de origen vegetal y animal (excepto elaboración de mantequilla)	\N	\N
+105000	Elaboración de productos lácteos	\N	\N
+106101	Molienda de trigo: producción de harina, sémola y gránulos	\N	\N
+106102	Molienda de arroz; producción de harina de arroz	\N	\N
+106109	Elaboración de otros productos de molinería n.c.p.	\N	\N
+106200	Elaboración de almidones y productos derivados del almidón	\N	\N
+108000	Elaboración de piensos preparados para animales	\N	\N
+107100	Elaboración de productos de panadería y pastelería	\N	\N
+107200	Elaboración de azúcar	\N	\N
+107300	Elaboración de cacao, chocolate y de productos de confitería	\N	\N
+107400	Elaboración de macarrones, fideos, alcuzcuz y productos farináceos similares	\N	\N
+107901	Elaboración de té, café, mate e infusiones de hierbas	\N	\N
+107902	Elaboración de levaduras naturales o artificiales	\N	\N
+107903	Elaboración de vinagres, mostazas, mayonesas y condimentos en general	\N	\N
+107909	Elaboración de otros productos alimenticios n.c.p.	\N	\N
+110110	Elaboración de pisco (industrias pisqueras)	\N	\N
+110120	Destilación, rectificación y mezclas de bebidas alcohólicas; excepto pisco	\N	\N
+201109	Fabricación de otras sustancias químicas básicas n.c.p.	\N	\N
+110300	Elaboración de bebidas malteadas y de malta	\N	\N
+110401	Elaboración de bebidas no alcohólicas	\N	\N
+110402	Producción de aguas minerales y otras aguas embotelladas	\N	\N
+353002	Elaboración de hielo (excepto fabricación de hielo seco)	\N	\N
+120001	Elaboración de cigarros y cigarrillos	\N	\N
+120009	Elaboración de otros productos de tabaco n.c.p.	\N	\N
+131100	Preparación e hilatura de fibras textiles	\N	\N
+131200	Tejedura de productos textiles	\N	\N
+131300	Acabado de productos textiles	\N	\N
+952900	Reparación de otros efectos personales y enseres domésticos	\N	\N
+139200	Fabricación de artículos confeccionados de materiales textiles, excepto prendas de vestir	\N	\N
+325009	Fabricación de instrumentos y materiales médicos, oftalmológicos y odontológicos n.c.p.	\N	\N
+331900	Reparación de otros tipos de equipo	\N	\N
+139300	Fabricación de tapices y alfombras	\N	\N
+139400	Fabricación de cuerdas, cordeles, bramantes y redes	\N	\N
+139900	Fabricación de otros productos textiles n.c.p.	\N	\N
+170900	Fabricación de otros artículos de papel y cartón	\N	\N
+139100	Fabricación de tejidos de punto y ganchillo	\N	\N
+143000	Fabricación de artículos de punto y ganchillo	\N	\N
+141001	Fabricación de prendas de vestir de materiales textiles y similares	\N	\N
+141002	Fabricación de prendas de vestir de cuero natural o artificial	\N	\N
+141003	Fabricación de accesorios de vestir	\N	\N
+141004	Fabricación de ropa de trabajo	\N	\N
+329000	Otras industrias manufactureras n.c.p.	\N	\N
+142000	Fabricación de artículos de piel	\N	\N
+151100	Curtido y adobo de cueros; adobo y teñido de pieles	\N	\N
+151200	Fabricación de maletas, bolsos y artículos similares, artículos de talabartería y guarnicionería	\N	\N
+152000	Fabricación de calzado	\N	\N
+162900	Fabricación de otros productos de madera, de artículos de corcho, paja y materiales trenzables	\N	\N
+221900	Fabricación de otros productos de caucho	\N	\N
+222000	Fabricación de productos de plástico	\N	\N
+323000	Fabricación de artículos de deporte	\N	\N
+161000	Aserrado y acepilladura de madera	\N	\N
+162100	Fabricación de hojas de madera para enchapado y tableros a base de madera	\N	\N
+162200	Fabricación de partes y piezas de carpintería para edificios y construcciones	\N	\N
+162300	Fabricación de recipientes de madera	\N	\N
+170110	Fabricación de celulosa y otras pastas de madera	\N	\N
+170190	Fabricación de papel y cartón para su posterior uso industrial n.c.p.	\N	\N
+170200	Fabricación de papel y cartón ondulado y de envases de papel y cartón	\N	\N
+181109	Otras actividades de impresión n.c.p.	\N	\N
+581100	Edición de libros	\N	\N
+581200	Edición de directorios y listas de correo	\N	\N
+592000	Actividades de grabación de sonido y edición de música	\N	\N
+581300	Edición de diarios, revistas y otras publicaciones periódicas	\N	\N
+581900	Otras actividades de edición	\N	\N
+181101	Impresión de libros	\N	\N
+181200	Actividades de servicios relacionadas con la impresión	\N	\N
+182000	Reproducción de grabaciones	\N	\N
+191000	Fabricación de productos de hornos de coque	\N	\N
+210000	Fabricación de productos farmacéuticos, sustancias químicas medicinales y productos botánicos	\N	\N
+242009	Fabricación de productos primarios de metales preciosos y de otros metales no ferrosos n.c.p.	\N	\N
+381200	Recogida de desechos peligrosos	\N	\N
+382200	Tratamiento y eliminación de desechos peligrosos	\N	\N
+201101	Fabricación de carbón vegetal (excepto activado); fabricación de briquetas de carbón vegetal	\N	\N
+201200	Fabricación de abonos y compuestos de nitrógeno	\N	\N
+382100	Tratamiento y eliminación de desechos no peligrosos	\N	\N
+201300	Fabricación de plásticos y caucho sintético en formas primarias	\N	\N
+202100	Fabricación de plaguicidas y otros productos químicos de uso agropecuario	\N	\N
+202200	Fabricación de pinturas, barnices y productos de revestimiento, tintas de imprenta y masillas	\N	\N
+202300	Fabricación de jabones y detergentes, preparados para limpiar, perfumes y preparados de tocador	\N	\N
+202901	Fabricación de explosivos y productos pirotécnicos	\N	\N
+202909	Fabricación de otros productos químicos n.c.p.	\N	\N
+261000	Fabricación de componentes y tableros electrónicos	\N	\N
+268000	Fabricación de soportes magnéticos y ópticos	\N	\N
+281700	Fabricación de maquinaria y equipo de oficina (excepto computadores y equipo periférico)	\N	\N
+203000	Fabricación de fibras artificiales	\N	\N
+221100	Fabricación de cubiertas y cámaras de caucho; recauchutado y renovación de cubiertas de caucho	\N	\N
+281200	Fabricación de equipo de propulsión de fluidos	\N	\N
+273300	Fabricación de dispositivos de cableado	\N	\N
+331400	Reparación de equipo eléctrico (excepto reparación de equipo y enseres domésticos)	\N	\N
+231001	Fabricación de vidrio plano	\N	\N
+231002	Fabricación de vidrio hueco	\N	\N
+231003	Fabricación de fibras de vidrio	\N	\N
+231009	Fabricación de productos de vidrio n.c.p.	\N	\N
+239300	Fabricación de otros productos de porcelana y de cerámica	\N	\N
+239200	Fabricación de materiales de construcción de arcilla	\N	\N
+239100	Fabricación de productos refractarios	\N	\N
+239400	Fabricación de cemento, cal y yeso	\N	\N
+239500	Fabricación de artículos de hormigón, cemento y yeso	\N	\N
+239600	Corte, talla y acabado de la piedra	\N	\N
+239900	Fabricación de otros productos minerales no metálicos n.c.p.	\N	\N
+241000	Industrias básicas de hierro y acero	\N	\N
+243100	Fundición de hierro y acero	\N	\N
+242001	Fabricación de productos primarios de cobre	\N	\N
+242002	Fabricación de productos primarios de aluminio	\N	\N
+243200	Fundición de metales no ferrosos	\N	\N
+251100	Fabricación de productos metálicos para uso estructural	\N	\N
+331100	Reparación de productos elaborados de metal	\N	\N
+251201	Fabricación de recipientes de metal para gases comprimidos o licuados	\N	\N
+251209	Fabricación de tanques, depósitos y recipientes de metal n.c.p.	\N	\N
+251300	Fabricación de generadores de vapor, excepto calderas de agua caliente para calefacción central	\N	\N
+332000	Instalación de maquinaria y equipos industriales	\N	\N
+259100	Forja, prensado, estampado y laminado de metales; pulvimetalurgia	\N	\N
+259200	Tratamiento y revestimiento de metales; maquinado	\N	\N
+259300	Fabricación de artículos de cuchillería, herramientas de mano y artículos de ferretería	\N	\N
+259900	Fabricación de otros productos elaborados de metal n.c.p.	\N	\N
+281100	Fabricación de motores y turbinas, excepto para aeronaves, vehículos automotores y motocicletas	\N	\N
+331209	Reparación de otro tipo de maquinaria y equipos industriales n.c.p.	\N	\N
+281300	Fabricación de otras bombas, compresores, grifos y válvulas	\N	\N
+281400	Fabricación de cojinetes, engranajes, trenes de engranajes y piezas de transmisión	\N	\N
+281500	Fabricación de hornos, calderas y quemadores	\N	\N
+281600	Fabricación de equipo de elevación y manipulación	\N	\N
+281900	Fabricación de otros tipos de maquinaria de uso general	\N	\N
+282100	Fabricación de maquinaria agropecuaria y forestal	\N	\N
+331201	Reparación de maquinaria agropecuaria y forestal	\N	\N
+279000	Fabricación de otros tipos de equipo eléctrico	\N	\N
+281800	Fabricación de herramientas de mano motorizadas	\N	\N
+282200	Fabricación de maquinaria para la conformación de metales y de máquinas herramienta	\N	\N
+282300	Fabricación de maquinaria metalúrgica	\N	\N
+331202	Reparación de maquinaria metalúrgica, para la minería, extracción de petróleo y para la construcción	\N	\N
+282400	Fabricación de maquinaria para la explotación de minas y canteras y para obras de construcción	\N	\N
+282500	Fabricación de maquinaria para la elaboración de alimentos, bebidas y tabaco	\N	\N
+331203	Reparación de maquinaria para la elaboración de alimentos, bebidas y tabaco	\N	\N
+282600	Fabricación de maquinaria para la elaboración de productos textiles, prendas de vestir y cueros	\N	\N
+331204	Reparación de maquinaria para producir textiles, prendas de vestir, artículos de cuero y calzado	\N	\N
+252000	Fabricación de armas y municiones	\N	\N
+303000	Fabricación de aeronaves, naves espaciales y maquinaria conexa	\N	\N
+304000	Fabricación de vehículos militares de combate	\N	\N
+282900	Fabricación de otros tipos de maquinaria de uso especial	\N	\N
+275000	Fabricación de aparatos de uso doméstico	\N	\N
+262000	Fabricación de computadores y equipo periférico	\N	\N
+271000	Fabricación de motores, generadores y transformadores eléctricos, aparatos de distribución y control	\N	\N
+273100	Fabricación de cables de fibra óptica	\N	\N
+273200	Fabricación de otros hilos y cables eléctricos	\N	\N
+272000	Fabricación de pilas, baterías y acumuladores	\N	\N
+274000	Fabricación de equipo eléctrico de iluminación	\N	\N
+263000	Fabricación de equipo de comunicaciones	\N	\N
+265100	Fabricación de equipo de medición, prueba, navegación y control	\N	\N
+293000	Fabricación de partes, piezas y accesorios para vehículos automotores	\N	\N
+302000	Fabricación de locomotoras y material rodante	\N	\N
+331309	Reparación de otros equipos electrónicos y ópticos n.c.p.	\N	\N
+951200	Reparación de equipo de comunicaciones (incluye la reparación teléfonos celulares)	\N	\N
+264000	Fabricación de aparatos electrónicos de consumo	\N	\N
+267000	Fabricación de instrumentos ópticos y equipo fotográfico	\N	\N
+952100	Reparación de aparatos electrónicos de consumo (incluye aparatos de televisión y radio)	\N	\N
+266000	Fabricación de equipo de irradiación y equipo electrónico de uso médico y terapéutico	\N	\N
+325001	Actividades de laboratorios dentales	\N	\N
+331301	Reparación de equipo de medición, prueba, navegación y control	\N	\N
+265200	Fabricación de relojes	\N	\N
+321100	Fabricación de joyas y artículos conexos	\N	\N
+321200	Fabricación de bisutería y artículos conexos	\N	\N
+291000	Fabricación de vehículos automotores	\N	\N
+292000	Fabricación de carrocerías para vehículos automotores; fabricación de remolques y semirremolques	\N	\N
+301100	Construcción de buques, embarcaciones menores y estructuras flotantes	\N	\N
+331501	Reparación de buques, embarcaciones menores y estructuras flotantes	\N	\N
+301200	Construcción de embarcaciones de recreo y de deporte	\N	\N
+602000	Programación y transmisiones de televisión	\N	\N
+331509	Reparación de otros equipos de transporte n.c.p., excepto vehículos automotores	\N	\N
+331502	Reparación de aeronaves y naves espaciales	\N	\N
+309100	Fabricación de motocicletas	\N	\N
+309200	Fabricación de bicicletas y de sillas de ruedas	\N	\N
+309900	Fabricación de otros tipos de equipo de transporte n.c.p.	\N	\N
+310009	Fabricación de colchones; fabricación de otros muebles n.c.p.	\N	\N
+310001	Fabricación de muebles principalmente de madera	\N	\N
+952400	Reparación de muebles y accesorios domésticos	\N	\N
+322000	Fabricación de instrumentos musicales	\N	\N
+324000	Fabricación de juegos y juguetes	\N	\N
+383001	Recuperación y reciclamiento de desperdicios y desechos metálicos	\N	\N
+383002	Recuperación y reciclamiento de papel	\N	\N
+383003	Recuperación y reciclamiento de vidrio	\N	\N
+383009	Recuperación y reciclamiento de otros desperdicios y desechos n.c.p.	\N	\N
+351011	Generación de energía eléctrica en centrales hidroeléctricas	\N	\N
+351012	Generación de energía eléctrica en centrales termoeléctricas	\N	\N
+351019	Generación de energía eléctrica en otras centrales n.c.p.	\N	\N
+351020	Transmisión de energía eléctrica	\N	\N
+351030	Distribución de energía eléctrica	\N	\N
+352010	Regasificación de Gas Natural Licuado (GNL)	\N	\N
+352020	Fabricación de gas; distribución de combustibles gaseosos por tubería, excepto regasificación de GNL	\N	\N
+353001	Suministro de vapor y de aire acondicionado	\N	\N
+360000	Captación, tratamiento y distribución de agua	\N	\N
+390000	Actividades de descontaminación y otros servicios de gestión de desechos	\N	\N
+431200	Preparación del terreno	\N	\N
+431100	Demolición	\N	\N
+410010	Construcción de edificios para uso residencial	\N	\N
+410020	Construcción de edificios para uso no residencial	\N	\N
+439000	Otras actividades especializadas de construcción	\N	\N
+421000	Construcción de carreteras y líneas de ferrocarril	\N	\N
+422000	Construcción de proyectos de servicio público	\N	\N
+429000	Construcción de otras obras de ingeniería civil	\N	\N
+432100	Instalaciones eléctricas	\N	\N
+432200	Instalaciones de gasfitería, calefacción y aire acondicionado	\N	\N
+432900	Otras instalaciones para obras de construcción	\N	\N
+433000	Terminación y acabado de edificios	\N	\N
+451001	Venta al por mayor de vehículos automotores	\N	\N
+451002	Venta al por menor de vehículos automotores nuevos o usados (incluye compraventa)	\N	\N
+452001	Servicio de lavado de vehículos automotores	\N	\N
+522190	Actividades de servicios vinculadas al transporte terrestre n.c.p.	\N	\N
+452002	Mantenimiento y reparación de vehículos automotores	\N	\N
+453000	Venta de partes, piezas y accesorios para vehículos automotores	\N	\N
+454001	Venta de motocicletas	\N	\N
+454002	Venta de partes, piezas y accesorios de motocicletas	\N	\N
+454003	Mantenimiento y reparación de motocicletas	\N	\N
+473000	Venta al por menor de combustibles para vehículos automotores en comercios especializados	\N	\N
+461001	Corretaje al por mayor de productos agrícolas	\N	\N
+461002	Corretaje al por mayor de ganado	\N	\N
+461009	Otros tipos de corretajes o remates al por mayor n.c.p.	\N	\N
+619090	Otras actividades de telecomunicaciones n.c.p.	\N	\N
+462020	Venta al por mayor de animales vivos	\N	\N
+462090	Venta al por mayor de otras materias primas agropecuarias n.c.p.	\N	\N
+462010	Venta al por mayor de materias primas agrícolas	\N	\N
+463011	Venta al por mayor de frutas y verduras	\N	\N
+463012	Venta al por mayor de carne y productos cárnicos	\N	\N
+463013	Venta al por mayor de productos del mar (pescados, mariscos y algas)	\N	\N
+463020	Venta al por mayor de bebidas alcohólicas y no alcohólicas	\N	\N
+463014	Venta al por mayor de productos de confitería	\N	\N
+463030	Venta al por mayor de tabaco	\N	\N
+463019	Venta al por mayor de huevos, lácteos, abarrotes y de otros alimentos n.c.p.	\N	\N
+464100	Venta al por mayor de productos textiles, prendas de vestir y calzado	\N	\N
+464901	Venta al por mayor de muebles, excepto muebles de oficina	\N	\N
+464902	Venta al por mayor de artículos eléctricos y electrónicos para el hogar	\N	\N
+464903	Venta al por mayor de artículos de perfumería, de tocador y cosméticos	\N	\N
+464904	Venta al por mayor de artículos de papelería y escritorio	\N	\N
+464905	Venta al por mayor de libros	\N	\N
+464906	Venta al por mayor de diarios y revistas	\N	\N
+464907	Venta al por mayor de productos farmacéuticos y medicinales	\N	\N
+464908	Venta al por mayor de instrumentos científicos y quirúrgicos	\N	\N
+464909	Venta al por mayor de otros enseres domésticos n.c.p.	\N	\N
+466302	Venta al por mayor de materiales de construcción, artículos de ferretería, gasfitería y calefacción	\N	\N
+466100	Venta al por mayor de combustibles sólidos, líquidos y gaseosos y productos conexos	\N	\N
+466200	Venta al por mayor de metales y minerales metalíferos	\N	\N
+466301	Venta al por mayor de madera en bruto y productos primarios de la elaboración de madera	\N	\N
+466901	Venta al por mayor de productos químicos	\N	\N
+466902	Venta al por mayor de desechos metálicos (chatarra)	\N	\N
+466909	Venta al por mayor de desperdicios, desechos y otros productos n.c.p.	\N	\N
+465300	Venta al por mayor de maquinaria, equipo y materiales agropecuarios	\N	\N
+465901	Venta al por mayor de maquinaria metalúrgica, para la minería, extracción de petróleo y construcción	\N	\N
+465902	Venta al por mayor de maquinaria para la elaboración de alimentos, bebidas y tabaco	\N	\N
+465903	Venta al por mayor de maquinaria para la industria textil, del cuero y del calzado	\N	\N
+465100	Venta al por mayor de computadores, equipo periférico y programas informáticos	\N	\N
+465200	Venta al por mayor de equipo, partes y piezas electrónicos y de telecomunicaciones	\N	\N
+465904	Venta al por mayor de maquinaria y equipo de oficina; venta al por mayor de muebles de oficina	\N	\N
+465905	Venta al por mayor de equipo de transporte(excepto vehículos automotores, motocicletas y bicicletas)	\N	\N
+465909	Venta al por mayor de otros tipos de maquinaria y equipo n.c.p.	\N	\N
+469000	Venta al por mayor no especializada	\N	\N
+471100	Venta al por menor en comercios de alimentos, bebidas o tabaco (supermercados e hipermercados)	\N	\N
+472101	Venta al por menor de alimentos en comercios especializados (almacenes pequeños y minimarket)	\N	\N
+471990	Otras actividades de venta al por menor en comercios no especializados n.c.p.	\N	\N
+471910	Venta al por menor en comercios de vestuario y productos para el hogar (grandes tiendas)	\N	\N
+477399	Venta al por menor de otros productos en comercios especializados n.c.p.	\N	\N
+472200	Venta al por menor de bebidas alcohólicas y no alcohólicas en comercios especializados (botillerías)	\N	\N
+472102	Venta al por menor en comercios especializados de carne y productos cárnicos	\N	\N
+472103	Venta al por menor en comercios especializados de frutas y verduras (verdulerías)	\N	\N
+472104	Venta al por menor en comercios especializados de pescado, mariscos y productos conexos	\N	\N
+472105	Venta al por menor en comercios especializados de productos de panadería y pastelería	\N	\N
+477391	Venta al por menor de alimento y accesorios para mascotas en comercios especializados	\N	\N
+472109	Venta al por menor en comercios especializados de huevos, confites y productos alimenticios n.c.p.	\N	\N
+472300	Venta al por menor de tabaco y productos de tabaco en comercios especializados	\N	\N
+477201	Venta al por menor de productos farmacéuticos y medicinales en comercios especializados	\N	\N
+477202	Venta al por menor de artículos ortopédicos en comercios especializados	\N	\N
+477203	Venta al por menor de artículos de perfumería, de tocador y cosméticos en comercios especializados	\N	\N
+477101	Venta al por menor de calzado en comercios especializados	\N	\N
+477102	Venta al por menor de prendas y accesorios de vestir en comercios especializados	\N	\N
+475100	Venta al por menor de telas, lanas, hilos y similares en comercios especializados	\N	\N
+477103	Venta al por menor de carteras, maletas y otros accesorios de viaje en comercios especializados	\N	\N
+475300	Venta al por menor de tapices, alfombras y cubrimientos para paredes y pisos	\N	\N
+475909	Venta al por menor de aparatos eléctricos, textiles para el hogar y otros enseres domésticos n.c.p.	\N	\N
+474200	Venta al por menor de equipo de sonido y de video en comercios especializados	\N	\N
+475901	Venta al por menor de muebles y colchones en comercios especializados	\N	\N
+475902	Venta al por menor de instrumentos musicales en comercios especializados	\N	\N
+476200	Venta al por menor de grabaciones de música y de video en comercios especializados	\N	\N
+475201	Venta al por menor de artículos de ferretería y materiales de construcción	\N	\N
+475202	Venta al por menor de pinturas, barnices y lacas en comercios especializados	\N	\N
+475203	Venta al por menor de productos de vidrio en comercios especializados	\N	\N
+477393	Venta al por menor de artículos ópticos en comercios especializados	\N	\N
+474100	Venta al por menor de computadores, equipo periférico, programas informáticos y equipo de telecom.	\N	\N
+476400	Venta al por menor de juegos y juguetes en comercios especializados	\N	\N
+476101	Venta al por menor de libros en comercios especializados	\N	\N
+476102	Venta al por menor de diarios y revistas en comercios especializados	\N	\N
+476103	Venta al por menor de artículos de papelería y escritorio en comercios especializados	\N	\N
+476301	Venta al por menor de artículos de caza y pesca en comercios especializados	\N	\N
+477392	Venta al por menor de armas y municiones en comercios especializados	\N	\N
+476302	Venta al por menor de bicicletas y sus repuestos en comercios especializados	\N	\N
+476309	Venta al por menor de otros artículos y equipos de deporte n.c.p.	\N	\N
+477394	Venta al por menor de artículos de joyería, bisutería y relojería en comercios especializados	\N	\N
+477310	Venta al por menor de gas licuado en bombonas (cilindros) en comercios especializados	\N	\N
+477395	Venta al por menor de carbón, leña y otros combustibles de uso doméstico en comercios especializados	\N	\N
+477396	Venta al por menor de recuerdos, artesanías y artículos religiosos en comercios especializados	\N	\N
+477397	Venta al por menor de flores, plantas, arboles, semillas y abonos en comercios especializados	\N	\N
+477398	Venta al por menor de mascotas en comercios especializados	\N	\N
+477401	Venta al por menor de antigüedades en comercios	\N	\N
+477402	Venta al por menor de ropa usada en comercios	\N	\N
+477409	Venta al por menor de otros artículos de segunda mano en comercios n.c.p.	\N	\N
+649209	Otras actividades de concesión de crédito n.c.p.	\N	\N
+479100	Venta al por menor por correo, por Internet y vía telefónica	\N	\N
+478100	Venta al por menor de alimentos, bebidas y tabaco en puestos de venta y mercados (incluye ferias)	\N	\N
+478200	Venta al por menor de productos textiles, prendas de vestir y calzado en puestos de venta y mercados	\N	\N
+478900	Venta al por menor de otros productos en puestos de venta y mercados (incluye ferias)	\N	\N
+479901	Venta al por menor realizada por independientes en la locomoción colectiva (Ley 20.388)	\N	\N
+479909	Otras actividades de venta por menor no realizadas en comercios, puestos de venta o mercados n.c.p.	\N	\N
+479902	Venta al por menor mediante máquinas expendedoras	\N	\N
+479903	Venta al por menor por comisionistas (no dependientes de comercios)	\N	\N
+952300	Reparación de calzado y de artículos de cuero	\N	\N
+952200	Reparación de aparatos de uso doméstico, equipo doméstico y de jardinería	\N	\N
+802000	Actividades de servicios de sistemas de seguridad (incluye servicios de cerrajería)	\N	\N
+551001	Actividades de hoteles	\N	\N
+551002	Actividades de moteles	\N	\N
+551003	Actividades de residenciales para turistas	\N	\N
+559001	Actividades de residenciales para estudiantes y trabajadores	\N	\N
+551009	Otras actividades de alojamiento para turistas n.c.p.	\N	\N
+552000	Actividades de camping y de parques para casas rodantes	\N	\N
+559009	Otras actividades de alojamiento n.c.p.	\N	\N
+561000	Actividades de restaurantes y de servicio móvil de comidas	\N	\N
+563009	Otras actividades de servicio de bebidas n.c.p.	\N	\N
+562900	Suministro industrial de comidas por encargo; concesión de servicios de alimentación	\N	\N
+562100	Suministro de comidas por encargo (Servicios de banquetería)	\N	\N
+491100	Transporte interurbano de pasajeros por ferrocarril	\N	\N
+491200	Transporte de carga por ferrocarril	\N	\N
+492110	Transporte urbano y suburbano de pasajeros vía metro y metrotren	\N	\N
+492120	Transporte urbano y suburbano de pasajeros vía locomoción colectiva	\N	\N
+492250	Transporte de pasajeros en buses interurbanos	\N	\N
+492130	Transporte de pasajeros vía taxi colectivo	\N	\N
+492210	Servicios de transporte de escolares	\N	\N
+492220	Servicios de transporte de trabajadores	\N	\N
+492190	Otras actividades de transporte urbano y suburbano de pasajeros por vía terrestre n.c.p.	\N	\N
+492290	Otras actividades de transporte de pasajeros por vía terrestre n.c.p.	\N	\N
+492230	Servicios de transporte de pasajeros en taxis libres y radiotaxis	\N	\N
+492240	Servicios de transporte a turistas	\N	\N
+492300	Transporte de carga por carretera	\N	\N
+493010	Transporte por oleoductos	\N	\N
+493020	Transporte por gasoductos	\N	\N
+493090	Otras actividades de transporte por tuberías n.c.p.	\N	\N
+501100	Transporte de pasajeros marítimo y de cabotaje	\N	\N
+501200	Transporte de carga marítimo y de cabotaje	\N	\N
+502100	Transporte de pasajeros por vías de navegación interiores	\N	\N
+502200	Transporte de carga por vías de navegación interiores	\N	\N
+511000	Transporte de pasajeros por vía aérea	\N	\N
+512000	Transporte de carga por vía aérea	\N	\N
+522400	Manipulación de la carga	\N	\N
+521009	Otros servicios de almacenamiento y depósito n.c.p.	\N	\N
+522110	Explotación de terminales terrestres de pasajeros	\N	\N
+522120	Explotación de estacionamientos de vehículos automotores y parquímetros	\N	\N
+522200	Actividades de servicios vinculadas al transporte acuático	\N	\N
+522300	Actividades de servicios vinculadas al transporte aéreo	\N	\N
+522130	Servicios prestados por concesionarios de carreteras	\N	\N
+791100	Actividades de agencias de viajes	\N	\N
+791200	Actividades de operadores turísticos	\N	\N
+799000	Otros servicios de reservas y actividades conexas (incluye venta de entradas para teatro, y otros)	\N	\N
+522910	Agencias de aduanas	\N	\N
+522920	Agencias de naves	\N	\N
+522990	Otras actividades de apoyo al transporte n.c.p.	\N	\N
+531000	Actividades postales	\N	\N
+821900	Fotocopiado, preparación de documentos y otras actividades especializadas de apoyo de oficina	\N	\N
+532000	Actividades de mensajería	\N	\N
+611010	Telefonía fija	\N	\N
+612010	Telefonía móvil celular	\N	\N
+613010	Telefonía móvil satelital	\N	\N
+611020	Telefonía larga distancia	\N	\N
+611030	Televisión de pago por cable	\N	\N
+612030	Televisión de pago inalámbrica	\N	\N
+613020	Televisión de pago satelital	\N	\N
+611090	Otros servicios de telecomunicaciones alámbricas n.c.p.	\N	\N
+612090	Otros servicios de telecomunicaciones inalámbricas n.c.p.	\N	\N
+613090	Otros servicios de telecomunicaciones por satélite n.c.p.	\N	\N
+619010	Centros de llamados y centros de acceso a Internet	\N	\N
+612020	Radiocomunicaciones móviles	\N	\N
+641100	Banca central	\N	\N
+641910	Actividades bancarias	\N	\N
+649201	Financieras	\N	\N
+641990	Otros tipos de intermediación monetaria n.c.p.	\N	\N
+649100	Leasing financiero	\N	\N
+649202	Actividades de crédito prendario	\N	\N
+649900	Otras actividades de servicios financieros, excepto las de seguros y fondos de pensiones n.c.p.	\N	\N
+661201	Actividades de securitizadoras	\N	\N
+663091	Administradoras de fondos de inversión	\N	\N
+663092	Administradoras de fondos mutuos	\N	\N
+663093	Administradoras de fices (fondos de inversión de capital extranjero)	\N	\N
+663094	Administradoras de fondos para la vivienda	\N	\N
+663099	Administradoras de fondos para otros fines n.c.p.	\N	\N
+642000	Actividades de sociedades de cartera	\N	\N
+643000	Fondos y sociedades de inversión y entidades financieras similares	\N	\N
+774000	Arrendamiento de propiedad intelectual y similares, excepto obras protegidas por derechos de autor	\N	\N
+651100	Seguros de vida	\N	\N
+652000	Reaseguros	\N	\N
+653000	Fondos de pensiones	\N	\N
+663010	Administradoras de Fondos de Pensiones (AFP)	\N	\N
+651210	Seguros generales, excepto actividades de Isapres	\N	\N
+651220	Actividades de Isapres	\N	\N
+661100	Administración de mercados financieros	\N	\N
+661202	Corredores de bolsa	\N	\N
+661203	Agentes de valores	\N	\N
+661209	Otros servicios de corretaje de valores y commodities n.c.p.	\N	\N
+661901	Actividades de cámaras de compensación	\N	\N
+661902	Administración de tarjetas de crédito	\N	\N
+661903	Empresas de asesoría y consultoría en inversión financiera; sociedades de apoyo al giro	\N	\N
+661904	Actividades de clasificadoras de riesgo	\N	\N
+661204	Actividades de casas de cambio y operadores de divisa	\N	\N
+661909	Otras actividades auxiliares de las actividades de servicios financieros n.c.p.	\N	\N
+662200	Actividades de agentes y corredores de seguros	\N	\N
+662100	Evaluación de riesgos y daños (incluye actividades de liquidadores de seguros)	\N	\N
+662900	Otras actividades auxiliares de las actividades de seguros y fondos de pensiones	\N	\N
+681011	Alquiler de bienes inmuebles amoblados o con equipos y maquinarias	\N	\N
+681012	Compra, venta y alquiler (excepto amoblados) de inmuebles	\N	\N
+681020	Servicios imputados de alquiler de viviendas	\N	\N
+682000	Actividades inmobiliarias realizadas a cambio de una retribución o por contrata	\N	\N
+811000	Actividades combinadas de apoyo a instalaciones	\N	\N
+771000	Alquiler de vehículos automotores sin chofer	\N	\N
+773001	Alquiler de equipos de transporte sin operario, excepto vehículos automotores	\N	\N
+773002	Alquiler de maquinaria y equipo agropecuario, forestal, de construcción e ing. civil, sin operarios	\N	\N
+773003	Alquiler de maquinaria y equipo de oficina, sin operarios (sin servicio administrativo)	\N	\N
+773009	Alquiler de otros tipos de maquinarias y equipos sin operario n.c.p.	\N	\N
+772100	Alquiler y arrendamiento de equipo recreativo y deportivo	\N	\N
+772200	Alquiler de cintas de video y discos	\N	\N
+772900	Alquiler de otros efectos personales y enseres domésticos (incluye mobiliario para eventos)	\N	\N
+620100	Actividades de programación informática	\N	\N
+582000	Edición de programas informáticos	\N	\N
+601000	Transmisiones de radio	\N	\N
+620200	Actividades de consultoría de informática y de gestión de instalaciones informáticas	\N	\N
+631100	Procesamiento de datos, hospedaje y actividades conexas	\N	\N
+631200	Portales web	\N	\N
+951100	Reparación de computadores y equipo periférico	\N	\N
+620900	Otras actividades de tecnología de la información y de servicios informáticos	\N	\N
+721000	Investigaciones y desarrollo experimental en el campo de las ciencias naturales y la ingeniería	\N	\N
+722000	Investigaciones y desarrollo experimental en el campo de las ciencias sociales y las humanidades	\N	\N
+691001	Servicios de asesoramiento y representación jurídica	\N	\N
+691002	Servicio notarial	\N	\N
+691003	Conservador de bienes raíces	\N	\N
+691004	Receptores judiciales	\N	\N
+691009	Servicios de arbitraje; síndicos de quiebra y peritos judiciales; otras actividades jurídicas n.c.p.	\N	\N
+692000	Actividades de contabilidad, teneduría de libros y auditoría; consultoría fiscal	\N	\N
+732000	Estudios de mercado y encuestas de opinión pública	\N	\N
+701000	Actividades de oficinas principales	\N	\N
+702000	Actividades de consultoría de gestión	\N	\N
+855000	Actividades de apoyo a la enseñanza	\N	\N
+711001	Servicios de arquitectura (diseño de edificios, dibujo de planos de construcción, entre otros)	\N	\N
+711002	Empresas de servicios de ingeniería y actividades conexas de consultoría técnica	\N	\N
+91002	Actividades de apoyo para la extracción de petróleo y gas natural prestados por profesionales	\N	\N
+99002	Actividades de apoyo para la explotación de otras minas y canteras prestados por profesionales	\N	\N
+711003	Servicios profesionales de ingeniería y actividades conexas de consultoría técnica	\N	\N
+741009	Otras actividades especializadas de diseño n.c.p.	\N	\N
+749009	Otras actividades profesionales, científicas y técnicas n.c.p.	\N	\N
+712001	Actividades de plantas de revisión técnica para vehículos automotores	\N	\N
+712009	Otros servicios de ensayos y análisis técnicos (excepto actividades de plantas de revisión técnica)	\N	\N
+731001	Servicios de publicidad prestados por empresas	\N	\N
+731002	Servicios de publicidad prestados por profesionales	\N	\N
+782000	Actividades de agencias de empleo temporal (incluye empresas de servicios transitorios)	\N	\N
+783000	Otras actividades de dotación de recursos humanos	\N	\N
+781000	Actividades de agencias de empleo	\N	\N
+803000	Actividades de investigación (incluye actividades de investigadores y detectives privados)	\N	\N
+801001	Servicios de seguridad privada prestados por empresas	\N	\N
+801002	Servicio de transporte de valores en vehículos blindados	\N	\N
+801003	Servicios de seguridad privada prestados por independientes	\N	\N
+812100	Limpieza general de edificios	\N	\N
+812909	Otras actividades de limpieza de edificios e instalaciones industriales n.c.p.	\N	\N
+812901	Desratización, desinfección y exterminio de plagas no agrícolas	\N	\N
+742001	Servicios de revelado, impresión y ampliación de fotografías	\N	\N
+742002	Servicios y actividades de fotografía	\N	\N
+742003	Servicios personales de fotografía	\N	\N
+829200	Actividades de envasado y empaquetado	\N	\N
+829110	Actividades de agencias de cobro	\N	\N
+829120	Actividades de agencias de calificación crediticia	\N	\N
+749001	Asesoría y gestión en la compra o venta de pequeñas y medianas empresas	\N	\N
+741001	Actividades de diseño de vestuario	\N	\N
+741002	Actividades de diseño y decoración de interiores	\N	\N
+821100	Actividades combinadas de servicios administrativos de oficina	\N	\N
+749003	Servicios personales de traducción e interpretación	\N	\N
+749002	Servicios de traducción e interpretación prestados por empresas	\N	\N
+749004	Actividades de agencias y agentes de representación de actores, deportistas y otras figuras públicas	\N	\N
+829900	Otras actividades de servicios de apoyo a las empresas n.c.p.	\N	\N
+823000	Organización de convenciones y exposiciones comerciales	\N	\N
+822000	Actividades de call-center	\N	\N
+639900	Otras actividades de servicios de información n.c.p.	\N	\N
+841100	Actividades de la administración pública en general	\N	\N
+841200	Regulación de las actividades de organismos que prestan servicios sanitarios, educativos, culturales	\N	\N
+841300	Regulación y facilitación de la actividad económica	\N	\N
+910100	Actividades de bibliotecas y archivos	\N	\N
+842300	Actividades de mantenimiento del orden público y de seguridad	\N	\N
+842100	Relaciones exteriores	\N	\N
+889000	Otras actividades de asistencia social sin alojamiento	\N	\N
+842200	Actividades de defensa	\N	\N
+843010	Fondo Nacional de Salud (FONASA)	\N	\N
+843020	Instituto de Previsión Social (IPS)	\N	\N
+843090	Otros planes de seguridad social de afiliación obligatoria n.c.p.	\N	\N
+649203	Cajas de compensación	\N	\N
+850011	Enseñanza preescolar pública	\N	\N
+850021	Enseñanza preescolar privada	\N	\N
+850012	Enseñanza primaria, secundaria científico humanista y técnico profesional pública	\N	\N
+850022	Enseñanza primaria, secundaria científico humanista y técnico profesional privada	\N	\N
+853110	Enseñanza superior en universidades públicas	\N	\N
+853120	Enseñanza superior en universidades privadas	\N	\N
+853201	Enseñanza superior en institutos profesionales	\N	\N
+853202	Enseñanza superior en centros de formación técnica	\N	\N
+854901	Enseñanza preuniversitaria	\N	\N
+854909	Otros tipos de enseñanza n.c.p.	\N	\N
+854902	Servicios personales de educación	\N	\N
+861010	Actividades de hospitales y clínicas públicas	\N	\N
+861020	Actividades de hospitales y clínicas privadas	\N	\N
+862031	Servicios de médicos prestados de forma independiente	\N	\N
+862010	Actividades de centros de salud municipalizados (servicios de salud pública)	\N	\N
+862021	Centros médicos privados (establecimientos de atención ambulatoria)	\N	\N
+862032	Servicios de odontólogos prestados de forma independiente	\N	\N
+862022	Centros de atención odontológica privados (establecimientos de atención ambulatoria)	\N	\N
+869010	Actividades de laboratorios clínicos y bancos de sangre	\N	\N
+869092	Servicios prestados de forma independiente por otros profesionales de la salud	\N	\N
+869091	Otros servicios de atención de la salud humana prestados por empresas	\N	\N
+871000	Actividades de atención de enfermería en instituciones	\N	\N
+872000	Actividades de atención en instituciones para personas con discapacidad mental y toxicómanos	\N	\N
+873000	Actividades de atención en instituciones para personas de edad y personas con discapacidad física	\N	\N
+750001	Actividades de clínicas veterinarias	\N	\N
+750002	Actividades de veterinarios, técnicos y otro personal auxiliar, prestados de forma independiente	\N	\N
+879000	Otras actividades de atención en instituciones	\N	\N
+881000	Actividades de asistencia social sin alojamiento para personas de edad y personas con discapacidad	\N	\N
+381100	Recogida de desechos no peligrosos	\N	\N
+370000	Evacuación y tratamiento de aguas servidas	\N	\N
+941100	Actividades de asociaciones empresariales y de empleadores	\N	\N
+941200	Actividades de asociaciones profesionales	\N	\N
+942000	Actividades de sindicatos	\N	\N
+949100	Actividades de organizaciones religiosas	\N	\N
+949200	Actividades de organizaciones políticas	\N	\N
+949901	Actividades de centros de madres	\N	\N
+949902	Actividades de clubes sociales	\N	\N
+949903	Fundaciones y corporaciones; asociaciones que promueven actividades culturales o recreativas	\N	\N
+591100	Actividades de producción de películas cinematográficas, videos y programas de televisión	\N	\N
+591200	Actividades de postproducción de películas cinematográficas, videos y programas de televisión	\N	\N
+591300	Actividades de distribución de películas cinematográficas, videos y programas de televisión	\N	\N
+591400	Actividades de exhibición de películas cinematográficas y cintas de video	\N	\N
+900001	Servicios de producción de obras de teatro, conciertos, espectáculos de danza, otras prod. Escénicas	\N	\N
+900009	Otras actividades creativas, artísticas y de entretenimiento n.c.p.	\N	\N
+900002	Actividades artísticas realizadas por bandas de música, compañías de teatro, circenses y similares	\N	\N
+900003	Actividades de artistas realizadas de forma independiente: actores, músicos, escritores, entre otros	\N	\N
+854200	Enseñanza cultural	\N	\N
+563001	Actividades de discotecas y cabaret (night club), con predominio del servicio de bebidas	\N	\N
+932909	Otras actividades de esparcimiento y recreativas n.c.p.	\N	\N
+932100	Actividades de parques de atracciones y parques temáticos	\N	\N
+639100	Actividades de agencias de noticias	\N	\N
+900004	Servicios prestados por periodistas independientes	\N	\N
+910200	Actividades de museos, gestión de lugares y edificios históricos	\N	\N
+910300	Actividades de jardines botánicos, zoológicos y reservas naturales	\N	\N
+931109	Gestión de otras instalaciones deportivas n.c.p.	\N	\N
+931909	Otras actividades deportivas n.c.p.	\N	\N
+931209	Actividades de otros clubes deportivos n.c.p.	\N	\N
+931201	Actividades de clubes de fútbol amateur y profesional	\N	\N
+931101	Hipódromos	\N	\N
+854100	Enseñanza deportiva y recreativa	\N	\N
+931901	Promoción y organización de competencias deportivas	\N	\N
+920090	Otras actividades de juegos de azar y apuestas n.c.p.	\N	\N
+920010	Actividades de casinos de juegos	\N	\N
+931102	Gestión de salas de billar; gestión de salas de bolos (bowling)	\N	\N
+932901	Gestión de salas de pool; gestión (explotación) de juegos electrónicos	\N	\N
+960100	Lavado y limpieza, incluida la limpieza en seco, de productos textiles y de piel	\N	\N
+960200	Peluquería y otros tratamientos de belleza	\N	\N
+960310	Servicios funerarios	\N	\N
+960320	Servicios de cementerios	\N	\N
+960902	Actividades de salones de masajes, baños turcos, saunas, servicio de baños públicos	\N	\N
+960909	Otras actividades de servicios personales n.c.p.	\N	\N
+970000	Actividades de los hogares como empleadores de personal doméstico	\N	\N
+949904	Consejo de administración de edificios y condominios	\N	\N
+990000	Actividades de organizaciones y órganos extraterritoriales	\N	\N
+\.
+
+
+--
+-- Data for Name: auth; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.auth (id, grupo, recurso) FROM stdin;
+1	1000	*
+2	1001	/sistema*
+3	1002	/sistema/usuarios/usuarios*
+\.
+
+
+--
+-- Data for Name: comuna; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.comuna (codigo, comuna, provincia) FROM stdin;
+\.
+
+
+--
+-- Data for Name: grupo; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.grupo (id, grupo, activo) FROM stdin;
+1000	sysadmin	t
+1001	appadmin	t
+1002	passwd	t
+\.
+
+
+--
+-- Data for Name: moneda_cambio; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.moneda_cambio (desde, a, fecha, valor) FROM stdin;
+\.
+
+
+--
+-- Data for Name: provincia; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.provincia (codigo, provincia, region) FROM stdin;
+\.
+
+
+--
+-- Data for Name: region; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.region (codigo, region) FROM stdin;
+\.
+
+
+--
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.usuario (id, nombre, usuario, usuario_ldap, email, contrasenia, contrasenia_intentos, hash, token, activo, ultimo_ingreso_fecha_hora, ultimo_ingreso_desde, ultimo_ingreso_hash) FROM stdin;
+1000	Administrador	admin	\N	admin@example.com	8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918	3	t7dr5B1ujphds043WMMEFWwFLeyWYqMU	\N	t	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: usuario_config; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.usuario_config (usuario, configuracion, variable, valor, json) FROM stdin;
+\.
+
+
+--
+-- Data for Name: usuario_grupo; Type: TABLE DATA; Schema: public; Owner: prueba
+--
+
+COPY public.usuario_grupo (usuario, grupo, primario) FROM stdin;
+1000	1000	t
+\.
+
+
+--
+-- Name: auth_id_seq; Type: SEQUENCE SET; Schema: public; Owner: prueba
+--
+
+SELECT pg_catalog.setval('public.auth_id_seq', 3, true);
+
+
+--
+-- Name: grupo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: prueba
+--
+
+SELECT pg_catalog.setval('public.grupo_id_seq', 1002, true);
+
+
+--
+-- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: prueba
+--
+
+SELECT pg_catalog.setval('public.usuario_id_seq', 1000, true);
+
+
+--
+-- Name: actividad_economica actividad_economica_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.actividad_economica
+    ADD CONSTRAINT actividad_economica_pkey PRIMARY KEY (codigo);
+
+
+--
+-- Name: auth auth_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.auth
+    ADD CONSTRAINT auth_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: comuna comuna_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.comuna
+    ADD CONSTRAINT comuna_pkey PRIMARY KEY (codigo);
+
+
+--
+-- Name: grupo grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.grupo
+    ADD CONSTRAINT grupo_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: moneda_cambio moneda_cambio_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.moneda_cambio
+    ADD CONSTRAINT moneda_cambio_pkey PRIMARY KEY (desde, a, fecha);
+
+
+--
+-- Name: provincia provincia_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.provincia
+    ADD CONSTRAINT provincia_pkey PRIMARY KEY (codigo);
+
+
+--
+-- Name: region region_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.region
+    ADD CONSTRAINT region_pkey PRIMARY KEY (codigo);
+
+
+--
+-- Name: usuario_config usuario_config_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.usuario_config
+    ADD CONSTRAINT usuario_config_pkey PRIMARY KEY (usuario, configuracion, variable);
+
+
+--
+-- Name: usuario_grupo usuario_grupo_pk; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.usuario_grupo
+    ADD CONSTRAINT usuario_grupo_pk PRIMARY KEY (usuario, grupo);
+
+
+--
+-- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: grupo_grupo_idx; Type: INDEX; Schema: public; Owner: prueba
+--
+
+CREATE UNIQUE INDEX grupo_grupo_idx ON public.grupo USING btree (grupo);
+
+
+--
+-- Name: usuario_email_idx; Type: INDEX; Schema: public; Owner: prueba
+--
+
+CREATE UNIQUE INDEX usuario_email_idx ON public.usuario USING btree (email);
+
+
+--
+-- Name: usuario_hash_idx; Type: INDEX; Schema: public; Owner: prueba
+--
+
+CREATE UNIQUE INDEX usuario_hash_idx ON public.usuario USING btree (hash);
+
+
+--
+-- Name: usuario_usuario_idx; Type: INDEX; Schema: public; Owner: prueba
+--
+
+CREATE UNIQUE INDEX usuario_usuario_idx ON public.usuario USING btree (usuario);
+
+
+--
+-- Name: usuario_usuario_ldap_idx; Type: INDEX; Schema: public; Owner: prueba
+--
+
+CREATE UNIQUE INDEX usuario_usuario_ldap_idx ON public.usuario USING btree (usuario_ldap);
+
+
+--
+-- Name: auth auth_grupo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.auth
+    ADD CONSTRAINT auth_grupo_fkey FOREIGN KEY (grupo) REFERENCES public.grupo(id) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: comuna comuna_provincia_fk; Type: FK CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.comuna
+    ADD CONSTRAINT comuna_provincia_fk FOREIGN KEY (provincia) REFERENCES public.provincia(codigo) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: provincia provincia_region_fk; Type: FK CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.provincia
+    ADD CONSTRAINT provincia_region_fk FOREIGN KEY (region) REFERENCES public.region(codigo) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: usuario_config usuario_config_usuario_fk; Type: FK CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.usuario_config
+    ADD CONSTRAINT usuario_config_usuario_fk FOREIGN KEY (usuario) REFERENCES public.usuario(id) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: usuario_grupo usuario_grupo_grupo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.usuario_grupo
+    ADD CONSTRAINT usuario_grupo_grupo_fkey FOREIGN KEY (grupo) REFERENCES public.grupo(id) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: usuario_grupo usuario_grupo_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: prueba
+--
+
+ALTER TABLE ONLY public.usuario_grupo
+    ADD CONSTRAINT usuario_grupo_usuario_fkey FOREIGN KEY (usuario) REFERENCES public.usuario(id) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
