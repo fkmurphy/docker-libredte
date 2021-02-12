@@ -20,6 +20,7 @@ RUN apk update && \
         bash
 #RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+# install php extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         -j$(nproc) gd       \
@@ -33,21 +34,27 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 
 RUN pear install Mail Mail_Mime Net_SMTP
 
+#instal composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
         --filename=composer.phar \
         --install-dir=/usr/local/bin && \
 	mv /usr/local/bin/composer.phar /usr/local/bin/composer
 
 
+# install sower
 RUN  wget -c https://github.com/SowerPHP/sowerpkg/raw/master/sowerpkg.sh \
          && chmod +x sowerpkg.sh && mv sowerpkg.sh /usr/local/bin/sowerpkg \
          && sowerpkg install -e "app general" -W
 
+# define workdir
 WORKDIR /app
+
+# init libredte app
 RUN cd /app && git clone --recursive https://github.com/LibreDTE/libredte-webapp.git . \
     && cd /app/website \
     && composer install
 
+# copy initialize config libredte
 RUN mkdir /install_ldte
 COPY ${PWD}/docker-entrypoint.sh ${PWD}/core-dist.php ${PWD}/routes-dist.php /install_ldte/
 
@@ -64,5 +71,6 @@ RUN cp "/install_ldte/core-dist.php" "${CONFIG_FILE}" \
               -e "s/%DB_NAME%/${DB_NAME}/g" \
            "${CONFIG_FILE}" \
     && cp "/install_ldte/routes-dist.php" "${ROUTE_FILE}"
+
 
 CMD ["/install_ldte/docker-entrypoint.sh"]
