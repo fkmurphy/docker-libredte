@@ -75,4 +75,4 @@ RUN cp "/install_ldte/core-dist.php" "${CONFIG_FILE}" \
     && cp "/install_ldte/routes-dist.php" "${ROUTE_FILE}"
 
 
-CMD ["/install_ldte/docker-entrypoint.sh"]
+CMD ["/install_ldte/docker-entrypoint.sh", "php-fpm", "-F"]

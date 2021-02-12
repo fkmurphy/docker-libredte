@@ -6,12 +6,14 @@ services:
     env_file: .env
     depends_on:
       - postgres
-    #volumes:
-    # - ${PWD}/app:/app
+    volumes:
+      - ${PWD}/app:/app
   apache:
-    build: ${PWD}/apache
-    ports:
-        - 80:80
+    build: ${PWD}/apache2
+    #ports:
+    #- 2280:80
+    volumes:
+      - ${PWD}/app:/usr/local/apache2/htdocs
   postgres:
     image: postgres:12-alpine
     env_file: .env

@@ -1,0 +1,11 @@
+#! /bin/sh
+#
+# Created by configure
+
+"./configure" \
+"--build=x86_64-linux-musl" \
+"--prefix=/usr/local/apache2" \
+"--enable-mods-shared=reallyall" \
+"--enable-mpms-shared=all" \
+"build_alias=x86_64-linux-musl" \
+"$@"
