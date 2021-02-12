@@ -1,0 +1,35 @@
+codigo,retencion_total,nombre,tipo,tasa,descripcion
+14,,IVA de margen de comercializaciÃ³n,,,Para facturas de venta del contribuyente
+15,,IVA retenido total,R,19,Corresponde al IVA retenido en facturas de compra del contribuyente que genera libro. Suma de retenciones con tasa de IVA
+17,,IVA anticipado faenamiento carne,A,5,Sobre monto base faenamiento. Se registra el monto de IVA anticipado cobrado al cliente
+18,,IVA anticipado carne,A,5,Se registra el monto de IVA anticipado cobrado al cliente.
+19,,IVA anticipado harina,A,12,Se registra el monto de IVA anticipado cobrado al cliente
+23,,"Impuesto oro, platino, marfil, joyas, piedras precionas y pieles finas",A,15,"a) ArtÃ­culos oro, platino, marfil\nb) Joyas, piedras preciosas\nc) Pieles finas"
+24,,"Licores, piscos, whisky",A,"31.5","Tasa del 27%. Licores, piscos, whisky, aguardiente y vinos licorosos o aromatizados"
+25,,Vinos,A,"20.5",Tasa del 15%: Vinos
+26,,Cervezas y bebidas alcohÃ³licas,A,"20.5",Tasa del 15%: Cervezas y bebidas alcohÃ³licas
+27,,Bebidas analcohÃ³licas y minerales,A,10,Bebidas analcohÃ³licas y minerales
+271,,Bebidas azucaradas,A,18,"Bebidas analcohÃ³licas con elevada azÃºcar, mÃ¡s de 15 gramos por cada 240 mililitros"
+28,,Impuesto especÃ­fico diesel,,,"Impuesto especÃ­fico a los combustibles traspasado al comprador por compra de diesel segÃºn Ley NÂ° 18.502, decreto supremo NÂ° 311/86.\nImpuesto especÃ­fico resultante a los combustibles = componente fija + componente variable, segÃºn Ley 20.493, su reglamento y res. ex SII NÂ° 51 de 2011"
+29,,RecuperaciÃ³n impuesto especÃ­fico resultante al diesel transportistas,,,"Para transportistas de carga Art 2Â° Ley NÂ° 19.764/2001.\nImpuesto especÃ­fico resultante a los combustibles = componente fija + componente variable, segÃºn Ley 20.493, su reglamento y res. ex SII NÂ° 51 de 2011"
+30,301,IVA retenido legumbres,R,10,"Normalmente 10% retenciÃ³n.\n - Si se retuvo el 10%, el monto retenido se registra en el IEC en retenciÃ³n parcial.\n- Si se retuvo el total del IVA, por ser NDF se registra en retenciÃ³n total"
+31,,IVA retenido silvestres,R,19,Total del IVA retenciÃ³n. El monto retenido se registra en el IEC en retenciÃ³n total
+32,321,IVA retenido ganado,R,8,"Normalmente 8% de retenciÃ³n.\n- Si se retuvo el 8%, el monto se registra en el IEC en retenciÃ³n parcial\n- Si se retuvo el total del IVA, por ser NDF, se registra en el IEC en retenciÃ³n total"
+33,331,IVA retenido madera,R,8,"Normalmente 8% de retenciÃ³n.\n- Si se retuvo el 8%, el monto se registra en el IEC en retenciÃ³n parcial\n- Si se retuvo el total del IVA, por ser NDF, se registra en el IEC en retenciÃ³n total"
+34,341,IVA retenido trigo,R,4,"Normalmente 4% de retenciÃ³n.\n- Si se retuvo el 4%, el monto se registra en el IEC en retenciÃ³n parcial\n- Si se retuvo el total del IVA, por ser NDF, se registra en el IEC en retenciÃ³n total"
+35,,Impuesto especÃ­fico gasolina,,,"Impuesto especÃ­fico a los combustibles traspasado al comprador por compra de gasolina segÃºn Ley NÂ° 18.502, decreto supremo NÂ° 311/86.\nNo da derecho a crÃ©dito.\nImpuesto especÃ­fico resultante a los combustibles = componente fija + componente variable, segÃºn Ley 20.493, su reglamento y res. ex SII NÂ° 51 de 2011"
+36,361,IVA retenido arroz,R,10,"Normalmente 10% de retenciÃ³n.\n- Si se retuvo el 10%, el monto se registra en el IEC en retenciÃ³n parcial\n- Si se retuvo el total del IVA, por ser NDF, se registra en el IEC en retenciÃ³n total"
+37,371,IVA retenido hidrobiolÃ³gicas,R,10,"Normalmente 10% de retenciÃ³n.\n- Si se retuvo el 10%, el monto se registra en el IEC en retenciÃ³n parcial\n- Si se retuvo el total del IVA, por ser NDF, se registra en el IEC en retenciÃ³n total"
+38,,IVA retenido chatarra,R,19,Total del IVA retenciÃ³n. El monto retenido se registra en el IEC en retenciÃ³n total
+39,,IVA retenido PPA,R,19,Total del IVA retenciÃ³n. El monto retenido se registra en el IEC en retenciÃ³n total
+41,,IVA retenido construcciÃ³n,R,19,Se retiene el total del IVA
+44,,"Alfombras, tapices, casa rodantes, caviar, armas de aire o gas",A,15,"En 1era venta.\na) Alfombras, tapices\nb) Casa rodantes\nc) Caviar\nd)Armas de aire o gas"
+45,,Pirotecnia,A,50,En 1era venta\na) Pirotecnia
+47,,IVA retenido cartones,R,19,RetenciÃ³n total
+48,481,IVA retenido frambuesas,R,14,RetenciÃ³n 14%
+49,,Factura de compra sin retenciÃ³n,R,,"0% de retenciÃ³n (hoy utilizada sÃ³lo por Bolsa de Productos de Chile, lo cual es validado por el sistema)"
+50,,IVA de margen de comercializaciÃ³n de instrumentos de prepago,,,Para facturas de venta del contribuyente
+51,,"Impuesto gas natural comprimido; 1,93 UTM/KM3, Art 1Â° Ley NÂ° 20.052",,,Para facturas de venta del contribuyente
+52,,"Impuesto gas licuado de petrÃ³leo; 1,40 UTM/M3, Art 1Â° Ley NÂ° 20.052",,,Para facturas de venta del contribuyente
+53,,Impuesto retenido suplementeros Art 74 NÂ° 5 Ley de la Renta,R,,"Para facturas de venta del contribuyente, retenciÃ³n del 0,5% sobre el precio de venta al pÃºblico"
+60,,Impuesto retenido factura de inicio,R,,RetenciÃ³n total de impuestos factura de inicio. SÃ³lo una retenciÃ³n por documento.

@@ -4,6 +4,8 @@ services:
   libredte:
     build: ${PWD}/libredte
     env_file: .env
+    depends_on:
+      - postgres
     #volumes:
     # - ${PWD}/app:/app
   apache:

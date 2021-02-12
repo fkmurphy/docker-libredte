@@ -1,0 +1,46 @@
+codigo,tipo,electronico,compra,venta,categoria,enviar,cedible,operacion
+30,Factura,0,1,1,T,0,0,S
+32,Factura de ventas y servicios no afectos o excentos de IVA,0,1,1,T,0,0,S
+33,Factura electrónica,1,1,1,T,1,1,S
+34,Factura no afecta o exenta electrónica,1,1,1,T,1,1,S
+35,Boleta,0,0,1,T,0,0,S
+38,Boleta exenta,0,0,1,T,0,0,S
+39,Boleta electrónica,1,0,1,T,0,0,S
+40,Liquidación factura,0,1,1,T,0,0,
+43,Liquidación factura electrónica,1,1,1,T,1,0,
+41,Boleta exenta electrónica,1,0,1,T,0,0,S
+45,Factura de compra,0,1,1,T,0,0,R
+46,Factura de compra electrónica,1,1,1,T,1,0,R
+48,Pago electrónico,0,0,1,T,0,0,S
+50,Guía de despacho,0,0,0,T,0,0,
+52,Guía de despacho electrónica,1,0,0,T,1,0,
+55,Nota de débito,0,1,1,T,0,0,S
+56,Nota de débito electrónica,1,1,1,T,1,0,S
+60,Nota de crédito,0,1,1,T,0,0,R
+61,Nota de crédito electrónica,1,1,1,T,1,0,R
+103,Liquidación,0,0,1,T,0,0,
+108,Solicitud registro de factura (SRF),0,1,1,T,0,0,
+110,Factura de exportación electrónica,1,1,1,T,1,0,S
+111,Nota de débito de exportación electrónica,1,1,1,T,1,0,S
+112,Nota de crédito de exportación electrónica,1,1,1,T,1,0,R
+801,Orden de compra,0,0,0,I,0,0,
+802,Nota de pedido,0,0,0,I,0,0,
+803,Contrato,0,0,0,I,0,0,
+804,Resolución,0,0,0,I,0,0,
+805,Proceso ChileCompra,0,0,0,I,0,0,
+806,Ficha ChileCompra,0,0,0,I,0,0,
+807,DUS,0,0,0,I,0,0,
+808,B/L (conocimiento de embarque),0,0,0,I,0,0,
+809,AWB (Air Will Bill),0,0,0,I,0,0,
+810,MIC/DTA,0,0,0,I,0,0,
+811,Carta de porte,0,0,0,I,0,0,
+812,Resolución del SNA donde califica servicios de exportación,0,0,0,I,0,0,
+813,Pasaporte,0,0,0,I,0,0,
+814,Certificado de depósito bolsa prod. Chile,0,0,0,I,0,0,
+815,Vale de prenda bolsa prod. Chile,0,0,0,I,0,0,
+901,Factura de ventas a empresas del territorio preferencial,0,1,1,T,0,0,
+904,Factura de traspaso,0,1,1,T,0,0,
+909,Facturas venta módulo zona franca,0,1,0,T,0,0,
+910,Solicitud traslado zona franca (Z),0,1,0,T,0,0,
+911,Declaración de ingreso a zona franca primaria,0,1,0,T,0,0,
+914,Declaración de ingreso (DIN),0,1,0,T,0,0,S

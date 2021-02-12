@@ -1,0 +1,6 @@
+codigo,tipo
+1,Compras destinadas a IVA a generar operaciones no gravadas o exentas
+2,Facturas de proveedores registradas fuera de plazo
+3,Gastos rechazados
+4,"Entregas gratuitas (premios, bonificaciones, etc) recibidas"
+9,Otros

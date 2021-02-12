@@ -13,34 +13,37 @@ psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -f "/usr/share/sowerphp
 
 psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -f "/app/website/Module/Sistema/Module/General/Model/Sql/PostgreSQL/actividad_economica.sql"
 
+#actividad economica
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY actividad_economica FROM '/tmp/actividad_economica.csv' delimiter ',' csv header;"
 #psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\copy /usr/share/sowerphp/extensions/sowerphp/app/Module/Sistema/Module/General/Model/Sql/moneda.sql"
 
-
-
-apk add ttf-opensans gnumeric
-
-#Actividad economica
-ssconvert --export-type=Gnumeric_stf:stf_csv './website/Module/Sistema/Module/General/Model/Sql/actividad_economica.ods' fd://1 | awk -F, '{if (!a[$1]++) print}' > /tmp/actividad_economica.csv 
-
-psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\copy actividad_economica FROM '/tmp/actividad_economica.csv' csv header"
-
-# DivisionGeopolitica1
-ssconvert --export-type=Gnumeric_stf:stf_csv '/usr/share/sowerphp/extensions/sowerphp/app/Module/Sistema/Module/General/Module/DivisionGeopolitica/Model/Sql/division_geopolitica.ods' fd://1 | awk -F, '{if (!a[$1]++) print}' > /tmp/division_geopolitica.csv 
-
-psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER} -c 'CREATE TABLE division_geopolitica (codigo CHAR(5) PRIMARY KEY, comuna CHAR(5), CONSTRAINT division_geopolitica_comuna_fk FOREIGN KEY(comuna) REFERENCES comuna(codigo) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE, provincia CHAR(3), CONSTRAINT division_geopolitica_provincia_fk FOREIGN KEY(provincia) REFERENCES provincia (codigo) MATCH FULL ON UPDATE CASCADE ON DELETE CASCADE)'
-
+##Division geopolitica
 psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER} -f "/usr/share/sowerphp/extensions/sowerphp/app/Module/Sistema/Module/General/Module/DivisionGeopolitica/Model/Sql/PostgreSQL/division_geopolitica.sql"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY region FROM '/tmp/division_geopolitica.csv' delimiter ',' csv header;"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY provincia FROM '/tmp/provincia.csv' delimiter ',' csv header;"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY comuna FROM '/tmp/comuna.csv' delimiter ',' csv header;"
 
-#psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\copy division_geopolitica FROM '/tmp/division_geopolitica.csv' csv header"
 
 
 psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER} -f "/app/website/Module/Dte/Model/Sql/PostgreSQL.sql"
 
-ssconvert '/app/website/Module/Dte/Model/Sql/datos.ods' /tmp/datos.csv
-
-#psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\copy division_geopolitica FROM '/tmp/division_geopolitica.csv' csv header"
 
 mkdir -p /app/data/static/contribuyentes && chmod 775 /app/data/static/contribuyentes
+#download csv
+
+
+echo "REFERENCIA TIPO"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY dte_referencia_tipo FROM '/tmp/datos.csv' delimiter ',' csv header;"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY dte_tipo FROM '/tmp/dte_tipo.csv' delimiter ',' csv header;"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY impuesto_adicional FROM '/tmp/impuesto_adicional.csv' delimiter ',' csv header;"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "\COPY iva_no_recuperable FROM '/tmp/iva_no_recuperable.csv' delimiter ',' csv header;"
+
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "INSERT INTO contribuyente VALUES (55555555, '5', 'Extranjero', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NOW());"
+psql -d${POSTGRES_DB} -h postgres -a -U${POSTGRES_USER}  -c "INSERT INTO contribuyente VALUES (66666666, '6', 'Sin razón social informada', 'Sin giro informado', NULL, NULL, NULL, 'Sin dirección informada', '13101', NULL, NOW());"
+
+#apk add ttf-opensans gnumeric
+
+
 
 while [ true ]; do 
     sleep 10

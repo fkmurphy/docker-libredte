@@ -58,6 +58,8 @@ RUN cd /app && git clone --recursive https://github.com/LibreDTE/libredte-webapp
 RUN mkdir /install_ldte
 COPY ${PWD}/docker-entrypoint.sh ${PWD}/core-dist.php ${PWD}/routes-dist.php /install_ldte/
 
+COPY ${PWD}/csv/*.csv /tmp/
+
 RUN chmod u+x /install_ldte/docker-entrypoint.sh
 
 ENV CONFIG_DIR="/app/website/Config"
